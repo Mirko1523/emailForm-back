@@ -5,13 +5,20 @@ const sendEmail = async (req, res) => {
     const { client, sender_email, receiver_email, subject, content } = req.body;
 
     try {
-
         await transporter.sendMail({
-            from: sender_email,
+            from: `"Formulario Web de ${client}" <${process.env.EMAIL_USER}>`,
             to: receiver_email,
             subject,
-            text: content
+            text: `📩 Nuevo mensaje de ${client}
+
+Email del remitente: ${sender_email}
+
+Mensaje:
+${content}
+`,
+            replyTo: sender_email
         });
+
 
 
         await db.execute(
